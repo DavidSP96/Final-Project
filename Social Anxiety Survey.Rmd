@@ -1,0 +1,114 @@
+---
+title: "Social Anxiety Survey"
+output: html_document
+date: "2023-10-23"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(tidyverse)
+library(skimr)
+library(visdat)
+library(plotly)
+```
+#' # This project is using the Social Anxiety Survey from https://www.kaggle.com/datasets/carlsonhoo/university-social-anxiety-survey/data
+#'
+#' Download the data from the website, or the data should be included in the github repository.
+#'  
+#' You can adjust this to your file pathway to read in the csv data file 
+Social_Anxiety_Survey_Master <- read_csv("Cogs 212 Data Science/GitKraken Connection/COGS212/Student Social Anxiety Survey/Social_Anxiety_Survey_Master.csv")
+
+#'  If you have your pathway set this is an easier way to load in the csv file.
+#'  I also renamed the set to data_fr to make it easier to work with. 
+data_fr <- read_csv("Social_Anxiety_Survey_Master.csv") 
+#' This gives an overview of the data
+skim(data_fr) 
+
+#' This gives the distribution of answers for each question. 66 Respondents in total. 42 Student Respondents
+#' This filters out the non-students and gives me the number of responses by age group. 
+filter(data_fr, Student == 'Yes') |> count(Age)
+# 29/42 = 69% of students were ages 21 - 30
+# 7/42 = 17% of students were ages 31 - 40
+# 6/42 = 14% of students were 20 or below
+#' The count lets me see the distribution of answers for each column. 
+#' Some questions were multiple choice while others are based off 1-5 of the Likert scale. 
+count(data_fr, Q1) 
+count(data_fr, Q2)
+count(data_fr, Q3)
+count(data_fr, Q4)
+count(data_fr, Q5)
+count(data_fr, Q6)
+count(data_fr, Q7)
+
+#' These are what the column names are measuring in order for Q1 - Q7.  
+#colnames(data_fr)[6] <- ("How many hours per day do you spend on social media?") 
+#colnames(data_fr)[7] <- ("How do you feel being the center of attention")
+#colnames(data_fr)[8] <- ("Working while being observed?")
+#colnames(data_fr)[9] <- ("Talking face to face with someone you don't know very well?")
+#colnames(data_fr)[10] <- ("Expressing disagreement or disapproval to someone you don't know very well")
+#colnames(data_fr)[11] <- ("Are you extremely conscious of your actions when in social settings because you fear they might offend someone or you could be rejected?")
+#colnames(data_fr)[12] <- ("Do you feel anxious or panicky before social situations?")
+
+#' I decided having the columns listed as Q would be easier and have the columns names listed as comments rather than replacing their names in the dataframe. 
+
+#Gives length, class, and mode for a chosen column. 
+summary(data_fr$Q1)
+
+#Checks if all questions were answered for each subject. Shows 100% on all questions. 
+data_fr %>%
+  select(Student, Age, Q1, Q2, Q3, Q4, Q5, Q6, Q7) %>%
+  vis_miss(cluster = TRUE) 
+
+#Check the beginning and end of the data. Doesn't appear to have any errors or discrepancies. 
+data_fr |>
+  head () |>
+  view()
+
+data_fr |>
+  tail () |>
+  view()
+
+#Compare with at least one external source? Maybe from the blog website that reported the findings. 
+
+
+#Visualizes the distribution of answers for each question and removes the non-student answers.   
+data_fr |>
+  filter(Student == "Yes") |>
+ggplot(aes(Q1)) +
+  geom_bar()
+
+data_fr |>
+  filter(Student == "Yes") |>
+  ggplot(aes(Q2)) +
+  geom_bar()
+
+data_fr |>
+  filter(Student == "Yes") |>
+  ggplot(aes(Q3)) +
+  geom_bar()
+
+data_fr |>
+  filter(Student == "Yes") |>
+  ggplot(aes(Q4)) +
+  geom_bar()
+
+data_fr |>
+  filter(Student == "Yes") |>
+  ggplot(aes(Q5)) +
+  geom_bar()
+
+data_fr |>
+  filter(Student == "Yes") |>
+  ggplot(aes(Q6)) +
+  geom_bar()
+
+data_fr |>
+  filter(Student == "Yes") |>
+  ggplot(aes(Q7)) +
+  geom_bar()
+
+#Create colored graphs comparing variables of interest. 
+
+
+

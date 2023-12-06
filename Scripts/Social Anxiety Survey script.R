@@ -13,6 +13,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #'  If you have your pathway set this is an way to load in the csv file.
 #'  I also renamed the set to data_fr to make it easier to work with. 
+#'  reviewer comment: setting a path would be useful. Using here::here() like we have in the class is a good option.
+
+path <- here::here() 
+data_fr <- read_csv(paste0(path, "/Data/Social_Anxiety_Survey_Master.csv")) ## edited by reviewer to make line work
 data_fr <- read_csv("Social_Anxiety_Survey_Master.csv") 
 #' This gives an overview of the data
 skim(data_fr) 
@@ -203,6 +207,19 @@ data_fr |>
   arrange(desc(Q7))|>
   mutate(share = scales::percent(share, accuracty = 1))
 
+#### Reviewer comments ###
+#Is it clear what steps you need to take to run the script?
+# Pretty clear. Just needed to adjust the path in the beginning to load the data, but otherwise good.
 
+#When you follow those steps, does the script run?
+# The script runs smoothly and fast. It is readable and not redundant.
+
+#Is the html file from the repository reproducible?
+# Yes it is reproducible.
+
+#How easy or difficult is it to read the script and understand what the author is doing and why?
+# I would have liked a sentence or two on the motivation for this project to contextualize it better.
+# But once I looked at the visualizations I was able to make sense of what the author was trying to do and why.
+# Overall, the script accomplishes it's purpose in an efficient way.
 
 

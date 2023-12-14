@@ -4,6 +4,8 @@ output: html_document
 date: "2023-10-23"
 ---
 
+<!-- DH: This is an Rmd but, after the setup chunk, is written like an R script.  Since it won't run, I assume this isn't what I'm supposed to look at. -->
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(readr)

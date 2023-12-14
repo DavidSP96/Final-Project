@@ -16,7 +16,13 @@ knitr::opts_chunk$set(echo = TRUE)
 #'  I also renamed the set to data_fr to make it easier to work with. 
 ## DH: What is this data file?  Where did it come from, why are we looking at it? 
 ## DH: Wrong path. Edited so that it works on my machine. 
-data_fr <- read_csv(here("Data", "Social_Anxiety_Survey_Master.csv"))
+#I could not figure out how to get here to work on my script, so I will leave it commented out for you 
+#and set a pathway for myself. 
+#set_here()
+#data_fr <- read_csv(here("Data", "Social_Anxiety_Survey_Master.csv"))
+
+
+data_fr <- read_csv("Social_Anxiety_Survey_Master.csv")
 #' This gives an overview of the data
 skim(data_fr) 
 
@@ -58,13 +64,15 @@ count(data_fr, Q6)
 count(data_fr, Q7)
 
 ## DH: Anything notable here?  
+# Nothing notable here. This is just an overall distribution to check again for any missing respondents.
 
 #I decided having the columns listed as Q would be easier and have the columns names listed as comments rather than replacing their names in the dataframe. 
 
 #' This gives length, class, and mode for a chosen column. 
-summary(data_fr$Q1)
+summary(data_fr$Q2)
+#Nothing notable here.
 
-#' This checks if all questions were answered for each subject , which shows 100% on all questions. 
+#' This checks if all questions were answered for each subject with a visualization, which shows 100% on all questions. 
 data_fr %>%
   select(Student, Age, Q1, Q2, Q3, Q4, Q5, Q6, Q7) %>%
   vis_miss(cluster = TRUE) 
@@ -89,94 +97,86 @@ data_fr |>
 
 #' This visualizes the distribution of answers for each question and removes the non-student answers.   
 data_fr |>
-  filter(Student == "Yes") |>
   ggplot(aes(Q1)) +
   geom_bar() +
     coord_flip() ## DH: Readability
 
 data_fr |>
-  filter(Student == "Yes") |>
   ggplot(aes(Q2)) +
-  geom_bar()
+  geom_bar() +
+  coord_flip()
 
 data_fr |>
-  filter(Student == "Yes") |>
   ggplot(aes(Q3)) +
-  geom_bar()
+  geom_bar() +
+  coord_flip()
 
 data_fr |>
-  filter(Student == "Yes") |>
   ggplot(aes(Q4)) +
-  geom_bar()
+  geom_bar() +
+  coord_flip()
 
 data_fr |>
-  filter(Student == "Yes") |>
   ggplot(aes(Q5)) +
-  geom_bar()
+  geom_bar() +
+  coord_flip()
 
 data_fr |>
-  filter(Student == "Yes") |>
   ggplot(aes(Q6)) +
-  geom_bar()
+  geom_bar() +
+  coord_flip()
 
 data_fr |>
-  filter(Student == "Yes") |>
   ggplot(aes(Q7)) +
-  geom_bar()
+  geom_bar() +
+  coord_flip()
 
 #' This section creates colored graphs comparing variables of interest. 
 ## DH: Define the color scale separately so you don't need to copy and paste the whole thing, eg, 
 color_scale = scale_fill_manual(
-    values = c('red', 'blue', 'green', 'black', 'purple'))
+    values = c('red', 'blue', 'orange', 'black', 'purple'))
 
 data_fr |>
   filter(Student == "Yes") |>
-  ggplot(aes(Q1, fill = Gender)) +
+  ggplot(aes(Q1, fill = Age)) +
   geom_bar(position = position_fill()) +
   color_scale
 
 ## DH: (cont'd) Though red + green isn't colorblind friendly. Look into the viridis color palettes instead, eg, scale_fill_viridis_d()
 
 data_fr |>
-  filter(Student == "Yes") |>
-  ggplot(aes(Gender, fill = as.factor(Q2))) +
+  ggplot(aes(Q2, fill = Age)) +
   geom_bar(position = position_fill()) +
-  scale_fill_manual(values = c('red', 'blue', 'green', 'black', 'purple'))
+  color_scale
 data_fr |>
-  filter(Student == "Yes") |>
-  ggplot(aes(Gender, fill = as.factor(Q3))) +
+  ggplot(aes(Q3, fill = Age)) +
   geom_bar(position = position_fill()) +
-  scale_fill_manual(values = c('red', 'blue', 'green', 'black', 'purple'))
+  color_scale
 data_fr |>
-  filter(Student == "Yes") |>
-  ggplot(aes(Gender, fill = as.factor(Q4))) +
+  ggplot(aes(Q4, fill = Age)) +
   geom_bar(position = position_fill()) +
-  scale_fill_manual(values = c('red', 'blue', 'green', 'black', 'purple'))
+  color_scale
 data_fr |>
-  filter(Student == "Yes") |>
-  ggplot(aes(Gender, fill = as.factor(Q5))) +
+  ggplot(aes(Q5, fill = Age)) +
   geom_bar(position = position_fill()) +
-  scale_fill_manual(values = c('red', 'blue', 'green', 'black', 'purple'))
+  color_scale
 data_fr |>
-  filter(Student == "Yes") |>
-  ggplot(aes(Gender, fill = as.factor(Q6))) +
+  ggplot(aes(Q6, fill = Age)) +
   geom_bar(position = position_fill()) +
-  scale_fill_manual(values = c('red', 'blue', 'green', 'black', 'purple'))
+  color_scale
 data_fr |>
-  filter(Student == "Yes") |>
-  ggplot(aes(Gender, fill = as.factor(Q7))) +
+  ggplot(aes(Q7, fill = Age)) +
   geom_bar(position = position_fill()) +
-  scale_fill_manual(values = c('red', 'blue', 'green', 'black', 'purple'))
+  color_scale
 
 ## DH: Anything notable in any of this? 
 
-#' This section shows the percentages of answers between genders for each question in descending order of most stressed to least stressed. 
+#' This section shows the percentages of answers between Ages for each question in descending order of most stressed to least stressed. 
 ## DH: DRY: I can't remember whether we covered {{ "curly-curly" in this in this version of the class.  If we did, you can save a lot of redundancy with a helper function: 
 percentage = function(question) {
     data_fr |> 
-        filter(Student == "Yes") |>
-        count(Gender, {{ question }}) |>
-        group_by(Gender) |>
+        count(Age, {{ question }}) |>
+        group_by(Age) |>
         mutate(share = n / sum(n)) |>
         ungroup()|>
         arrange(desc({{ question }}))|>
@@ -184,63 +184,12 @@ percentage = function(question) {
 }
 
 percentage(Q1)
-
-data_fr |> 
-  filter(Student == "Yes") |>
-  count(Gender, Q1) |>
-  group_by(Gender) |>
-  mutate(share = n / sum(n)) |>
-  ungroup()|>
-  arrange(desc(Q1))|>
-  mutate(share = scales::percent(share, accuracty = 1))
-data_fr |> 
-  filter(Student == "Yes") |>
-  count(Gender, Q2) |>
-  group_by(Gender) |>
-  mutate(share = n / sum(n)) |>
-  ungroup()|>
-  arrange(desc(Q2))|>
-  mutate(share = scales::percent(share, accuracty = 1))
-data_fr |> 
-  filter(Student == "Yes") |>
-  count(Gender, Q3) |>
-  group_by(Gender) |>
-  mutate(share = n / sum(n)) |>
-  ungroup()|>
-  arrange(desc(Q3))|>
-  mutate(share = scales::percent(share, accuracty = 1))
-data_fr |> 
-  filter(Student == "Yes") |>
-  count(Gender, Q4) |>
-  group_by(Gender) |>
-  mutate(share = n / sum(n)) |>
-  ungroup()|>
-  arrange(desc(Q4))|>
-  mutate(share = scales::percent(share, accuracty = 1))
-data_fr |> 
-  filter(Student == "Yes") |>
-  count(Gender, Q5) |>
-  group_by(Gender) |>
-  mutate(share = n / sum(n)) |>
-  ungroup()|>
-  arrange(desc(Q5))|>
-  mutate(share = scales::percent(share, accuracty = 1))
-data_fr |> 
-  filter(Student == "Yes") |>
-  count(Gender, Q6) |>
-  group_by(Gender) |>
-  mutate(share = n / sum(n)) |>
-  ungroup()|>
-  arrange(desc(Q6))|>
-  mutate(share = scales::percent(share, accuracty = 1))
-data_fr |> 
-  filter(Student == "Yes") |>
-  count(Gender, Q7) |>
-  group_by(Gender) |>
-  mutate(share = n / sum(n)) |>
-  ungroup()|>
-  arrange(desc(Q7))|>
-  mutate(share = scales::percent(share, accuracty = 1))
+percentage(Q2)
+percentage(Q3)
+percentage(Q4)
+percentage(Q5)
+percentage(Q6)
+percentage(Q7)
 
 ## DH: Anything notable here? Per Peng and Matsui, what's the easy solution? 
 
